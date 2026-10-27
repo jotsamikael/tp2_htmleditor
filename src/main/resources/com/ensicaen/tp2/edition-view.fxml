@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
+
+<SplitPane
+        xmlns="http://javafx.com/javafx/26"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.ensicaen.tp2.EditionZoneController"
+        dividerPositions="0.5">
+
+   <items>
+
+      <!-- LEFT: HTML source code -->
+      <VBox minWidth="100">
+
+         <Label text="Code source" />
+
+         <TextArea
+                 fx:id="htmlEditor"
+                 VBox.vgrow="ALWAYS"
+                 wrapText="false"
+                 style="-fx-font-family: monospace;
+                       -fx-font-size: 13px;" />
+
+      </VBox>
+
+      <!-- RIGHT: HTML preview -->
+      <VBox minWidth="100">
+
+         <Label text="Aperçu" />
+
+         <WebView
+                 fx:id="htmlPreview"
+                 VBox.vgrow="ALWAYS" />
+
+      </VBox>
+
+   </items>
+
+</SplitPane>

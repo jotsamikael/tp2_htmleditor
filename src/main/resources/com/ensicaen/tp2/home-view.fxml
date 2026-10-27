@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ensicaen.tp2.HomeController">
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu fx:id="file" mnemonicParsing="false" text="Fichier">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onNewMenuItemClick" text="Nouveau" />
+                        <MenuItem mnemonicParsing="false" onAction="#onOpenMenuItemClick" text="Ouvrir" />
+                        <MenuItem mnemonicParsing="false" onAction="#onSaveMenuItemClick" text="Enregistrer" />
+                        <MenuItem mnemonicParsing="false" onAction="#onSaveAsMenuItemClick" text="Enregistrer sous" />
+                        <MenuItem mnemonicParsing="false" onAction="#oncloseMenuItemClick" text="Fermer" />
+                        <MenuItem mnemonicParsing="false" onAction="#onExitMenuItemClick" text="Quitter" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edition">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onCopyMenuItemClick" text="Copier" />
+                        <MenuItem mnemonicParsing="false" onAction="#onCutMenuItemClick" text="Couper" />
+                        <MenuItem mnemonicParsing="false" onAction="#onPasteMenuItemClick" text="Coller" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" onAction="#onPasteMenuItemClick" text="Aide">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onAboutMenuItemClick" text="À propos" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <HBox prefHeight="46.0" prefWidth="600.0" spacing="10.0">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onNewMenuItemClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/nouveau.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="copyImg" accessibleText="copy" fitHeight="25.0" fitWidth="30.0" layoutX="10.0" layoutY="10.0" onMouseClicked="#onCopyMenuItemClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/enregistrer_all.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="saveImg" fitHeight="25.0" fitWidth="30.0" layoutX="46.0" layoutY="10.0" onMouseClicked="#onSaveMenuItemClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/enregistrer.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="saveAsImg" fitHeight="25.0" fitWidth="30.0" layoutX="82.0" layoutY="10.0" onMouseClicked="#onSaveAsMenuItemClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/edit.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label contentDisplay="RIGHT" text="Caractères: " />
+            <Label fx:id="character_label" contentDisplay="RIGHT" layoutX="497.0" layoutY="15.0" />
+            <Label contentDisplay="RIGHT" layoutX="497.0" layoutY="15.0" text="-Lignes:" />
+            <Label fx:id="line_label" contentDisplay="RIGHT" layoutX="497.0" layoutY="15.0" />
+         </children>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </HBox>
+   </bottom>
+   <center>
+       <TabPane fx:id="tabPane" tabClosingPolicy="SELECTED_TAB" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
