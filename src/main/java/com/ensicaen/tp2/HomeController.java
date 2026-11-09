@@ -8,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -36,6 +35,15 @@ public class HomeController {
     @FXML
     private ImageView saveAsImg;
 
+    @FXML
+    private MenuItem pasteBtn;
+
+    @FXML
+    private MenuItem saveBtn;
+
+    @FXML
+    private MenuItem saveBtnAs;
+
     private final Map<Tab, EditionZoneController> editors =
             new HashMap<>();
 
@@ -43,31 +51,31 @@ public class HomeController {
 
 
 
-
     @FXML
     public void initialize() {
         //Tooltips
-
         Tooltip.install(copyImg, new Tooltip("Copy"));
         Tooltip.install(saveImg, new Tooltip("Save"));
         Tooltip.install(saveAsImg, new Tooltip("Save As"));
 
-        // Listen for tab selection changes to update statistics
+        //Set Paste Menu item to disabled initially
+        pasteBtn.setDisable(true);
+
+        saveBtn.setDisable(true);
+
         tabPane.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((obs, oldTab, newTab) -> {
                     updateStatistics();
+                    updateSaveAction();
                 });
 
-
+        onNewMenuItemClick();
     }
 
 
 
-    // =========================================
     // Create a new editor tab
-    // =========================================
-
     private EditionZoneController createEditorTab(String title) {
 
         try {
@@ -109,6 +117,15 @@ public class HomeController {
                     }
             );
 
+            controller.modifiedProperty().addListener(
+                    (obs, oldValue, newValue) -> {
+                        if (tabPane.getSelectionModel()
+                                .getSelectedItem() == tab) {
+                            updateSaveAction();
+                        }
+                    }
+            );
+
             // Add the new tab to the TabPane
             tabPane.getTabs().add(tab);
 
@@ -127,10 +144,7 @@ public class HomeController {
     }
 
 
-    // =========================================
     // Get active editor
-    // =========================================
-
     private EditionZoneController getActiveEditor() {
 
         Tab selectedTab = tabPane.getSelectionModel()
@@ -152,7 +166,7 @@ public class HomeController {
         );
 
         if (editor != null) {
-
+            //get the number of present untitled tabs and add 1 to it
             untitledCount++;
 
             editor.setContent(
@@ -167,6 +181,7 @@ public class HomeController {
                             "</html>"
             );
         }
+        updateSaveAction();
     }
 
     @FXML
@@ -201,6 +216,7 @@ public class HomeController {
                 }
             }
         }
+        updateSaveAction();
     }
 
     @FXML
@@ -220,7 +236,6 @@ public class HomeController {
                 onSaveAsMenuItemClick();
             }
         }
-
 
     }
 
@@ -270,17 +285,29 @@ public class HomeController {
 
     @FXML
     protected void onCopyMenuItemClick() {
-        System.out.println("on copy item clicked");
+        EditionZoneController editor = getActiveEditor();
+        if (editor != null) {
+            editor.copy();
+            pasteBtn.setDisable(false);
+        }
     }
 
     @FXML
     protected void onPasteMenuItemClick() {
-        System.out.println("on paste item clicked");
+        EditionZoneController editor = getActiveEditor();
+        if (editor != null) {
+                editor.paste();
+
+        }
     }
 
     @FXML
     protected void onCutMenuItemClick() {
-        System.out.println("cut item clicked");
+        EditionZoneController controller = getActiveEditor();
+        if (controller != null) {
+            controller.cut();
+            pasteBtn.setDisable(false);
+        }
     }
 
     @FXML
@@ -297,7 +324,7 @@ public class HomeController {
 
             Stage aboutStage = new Stage();
 
-            aboutStage.setTitle("À propos de HTMLEdit");
+            aboutStage.setTitle("À propos de HTML Edit");
 
             aboutStage.setScene(new Scene(root));
 
@@ -309,13 +336,9 @@ public class HomeController {
             }
             aboutStage.show();
             // Set the main window as owner
-            aboutStage.initOwner(
-                    tabPane.getScene().getWindow()
-            );
-
-            aboutStage.setResizable(false);
-
-            aboutStage.showAndWait();
+            //aboutStage.initOwner(tabPane.getScene().getWindow());
+            //aboutStage.setResizable(false);
+            //aboutStage.showAndWait();
 
         } catch (IOException e) {
             showError("Impossible de charger la vue 'À propos'", e);
@@ -323,11 +346,33 @@ public class HomeController {
     }
 
 
+    @FXML
+    protected void onSwitchToDarkThemeMenuItemClick() {
+        System.out.println("Switch theme clicked");
+        Scene scene = tabPane.getScene();
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(
+                getClass().getResource("dark-theme.css").toExternalForm());
+    }
+
+    @FXML
+    protected void onSwitchToDefaultThemeMenuItemClick() {
+        System.out.println("Switch theme clicked");
+        Scene scene = tabPane.getScene();
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(
+                getClass().getResource("default-theme.css").toExternalForm());
+    }
+
     //HELPER
 
-    // =========================================
     // Statistics
-    // =========================================
+    private void updateSaveAction() {
+        EditionZoneController editor = getActiveEditor();
+        boolean noEditor = editor == null;
+        saveBtn.setDisable(noEditor || !editor.isModified());
+        saveBtnAs.setDisable(noEditor);
+    }
 
     private void updateStatistics() {
 

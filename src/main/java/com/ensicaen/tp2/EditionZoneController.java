@@ -1,5 +1,7 @@
 package com.ensicaen.tp2;
 
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.fxml.FXML;
@@ -23,6 +25,12 @@ public class EditionZoneController {
 
     private File currentFile;
 
+    private boolean loading;
+
+
+    private final ReadOnlyBooleanWrapper modified =
+            new ReadOnlyBooleanWrapper(false);
+
     private final ReadOnlyIntegerWrapper characterCount =
             new ReadOnlyIntegerWrapper(0);
 
@@ -32,10 +40,9 @@ public class EditionZoneController {
     // This method is called by the FXMLLoader when initialization is complete
     @FXML
     public void initialize() {
-
         webEngine = htmlPreview.getEngine();
 
-        // Refresh the preview whenever HTML changes
+        // Refresh preview when HTML changes
         htmlEditor.textProperty().addListener(
                 (observable, oldValue, newValue) -> {
 
@@ -46,9 +53,16 @@ public class EditionZoneController {
                     lineCount.set(
                             newValue.split("\\R", -1).length
                     );
+
+                    // Set modified to true if the new value is different from the old value
+                    if (!loading) {
+                        modified.set(true);
+                    }
                 }
         );
     }
+
+
 
     public void setContent(String html) {
         htmlEditor.setText(html);
@@ -66,7 +80,13 @@ public class EditionZoneController {
         );
 
         currentFile = file;
-        setContent(content);
+        loading = true;
+        try {
+            setContent(content);
+        } finally {
+            loading = false;
+        }
+        modified.set(false);
     }
 
     public void saveFile(File file) throws IOException {
@@ -78,6 +98,15 @@ public class EditionZoneController {
         );
 
         currentFile = file;
+        modified.set(false);
+    }
+
+    public boolean isModified() {
+        return modified.get();
+    }
+
+    public ReadOnlyBooleanProperty modifiedProperty() {
+        return modified.getReadOnlyProperty();
     }
 
     public File getCurrentFile() {

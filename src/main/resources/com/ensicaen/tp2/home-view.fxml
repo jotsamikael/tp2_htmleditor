@@ -22,8 +22,8 @@
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#onNewMenuItemClick" text="Nouveau" />
                         <MenuItem mnemonicParsing="false" onAction="#onOpenMenuItemClick" text="Ouvrir" />
-                        <MenuItem mnemonicParsing="false" onAction="#onSaveMenuItemClick" text="Enregistrer" />
-                        <MenuItem mnemonicParsing="false" onAction="#onSaveAsMenuItemClick" text="Enregistrer sous" />
+                        <MenuItem fx:id="saveBtn" mnemonicParsing="false" onAction="#onSaveMenuItemClick" text="Enregistrer" />
+                        <MenuItem mnemonicParsing="false" onAction="#onSaveAsMenuItemClick" text="Enregistrer sous" fx:id="saveBtnAs" />
                         <MenuItem mnemonicParsing="false" onAction="#oncloseMenuItemClick" text="Fermer" />
                         <MenuItem mnemonicParsing="false" onAction="#onExitMenuItemClick" text="Quitter" />
                   </items>
@@ -32,7 +32,7 @@
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#onCopyMenuItemClick" text="Copier" />
                         <MenuItem mnemonicParsing="false" onAction="#onCutMenuItemClick" text="Couper" />
-                        <MenuItem mnemonicParsing="false" onAction="#onPasteMenuItemClick" text="Coller" />
+                        <MenuItem fx:id="pasteBtn" mnemonicParsing="false" onAction="#onPasteMenuItemClick" text="Coller" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" onAction="#onPasteMenuItemClick" text="Aide">
@@ -40,6 +40,12 @@
                     <MenuItem mnemonicParsing="false" onAction="#onAboutMenuItemClick" text="À propos" />
                   </items>
                 </Menu>
+                  <Menu mnemonicParsing="false" text="Theme">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onSwitchToDefaultThemeMenuItemClick" text="Default" />
+                        <MenuItem mnemonicParsing="false" onAction="#onSwitchToDarkThemeMenuItemClick" text="Dark" />
+                     </items>
+                  </Menu>
               </menus>
             </MenuBar>
             <HBox prefHeight="46.0" prefWidth="600.0" spacing="10.0">
